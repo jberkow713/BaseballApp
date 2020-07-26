@@ -1,0 +1,19 @@
+[[source]]
+name = "pypi"
+url = "https://pypi.org/simple"
+verify_ssl = true
+
+[dev-packages]
+
+[packages]
+csv-to-sqlite = "*"
+flask = "*"
+flask-sqlalchemy = "*"
+flask-migrate = "*"
+pandas = "*"
+jsonify = "*"
+json = "*"
+scipy = "*"
+
+[requires]
+python_version = "3.7"

@@ -8,15 +8,16 @@ class KNearestNeighbor:
 	#vector distance takes in a specific row, and finds the distance
 	# between that row and other rows, or in the case of a dataset, 
 	# all other rows in that dataset
-	# it scrolls through each value in the test_row and compares it to 
+	# it scrolls through each column in the test_row aside from the last one, 
+	# which should be the classification column,  and compares it to 
 	# values in the other specified rows
 	# it squares their distances, adds it to the distance value, and takes
 	# the square root of this value, to find the distance
 	# row_others represents rest of dataset
-	def vector_distance(self, test_row, row_others):
+	def vector_distance(self, dataset, test_row):
 		distance = 0.0
-		for i in range(len(test_row)-1):
-			distance += (test_row[i] - row_others[i])**2
+		for i in range(len(test_row)-2):
+			distance += (test_row[i] - dataset[i])**2
 		return distance**2
 	#fit takes in vector distance between specific rows and target row,
 	# adds them to a tuple, sorts the tuple by distances
@@ -48,7 +49,8 @@ class KNearestNeighbor:
 		output = [row[-1] for row in neighbors]
 		prediction = max(set(output), key=output.count)
 		return prediction
-
+	#we take the majority prediction and compare it to actual predictions,
+	# return percentage of correct predictions
 	def accuracy(self, dataset, test_row, num_neighbors):
 		neighbors = self.fit(dataset, test_row, num_neighbors)
 		output = [row[-1] for row in neighbors]
@@ -58,8 +60,9 @@ class KNearestNeighbor:
 			if output[i] == prediction:
 				correct += 1
 		return correct / float(len(output)) * 100.0    
-
-	
+	#in order for this to be most accurate, classification comparison column needs to be on far right, so that 
+	# it is not included in the vector distances, and therefore the column does not interfere with the other columns
+	# and their interaction with each other
 
 dataset1 = [[2.7810836,2.550537003,0],
 	[1.465489372,2.362125076,1],

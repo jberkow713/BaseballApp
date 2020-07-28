@@ -1,9 +1,9 @@
 class KNearestNeighbor:
-	def __init__(self, dataset, test_row, num_neighbors, row_others):
+	def __init__(self, dataset, test_row, num_neighbors):
 		self.dataset = dataset 
 		self.test_row = test_row
 		self.num_neighbors = num_neighbors
-		self.row_others = row_others 
+		
 	# Scroll through each value in each row, and find the minimum and maximum
 	# values for each column in the dataset. Append it to minmax list. 
 	# not include last column of dataset, as it should be classification 0/1 column, no need for min/max	
@@ -41,10 +41,11 @@ class KNearestNeighbor:
 	# it squares their distances, adds it to the distance value, and takes
 	# the square root of this value, to find the distance
 	#not including last column of dataset, as it should be the classification row
-	def vector_distance(self, test_row, row_others):
+	def vector_distance(self, test_row, dataset):
+		
 		distance = 0.0
 		for i in range(len(test_row)-1):
-			distance += (test_row[i] - row_others[i])**2
+			distance += (test_row[i] - dataset[i])**2
 		return distance**2
 	#fit takes in a normalized dataset,
 	# and then taking the vector distance between specific rows and target row in that dataset,
@@ -104,16 +105,16 @@ dataset1 = [[2.7810836,2.550537003,0],
 	[8.675418651,-0.242068655,1],
 	[7.673756466,3.508563011,1]]
 
-prediction = KNearestNeighbor(dataset1, dataset1[0], 3, dataset1)
+prediction = KNearestNeighbor(dataset1, dataset1[0], 7)
 # This will give the majority classification prediction based on number of nearest neighbors
 
 #print(prediction.Min_Max(dataset1))
 #print(prediction.Normalize(dataset1))
 #print ("   ")
-print( prediction.fit(dataset1, dataset1[0], 5))
-print(prediction.predict(dataset1, dataset1[0], 5))
+#print( prediction.fit(dataset1, dataset1[3], 5))
+print(prediction.predict(dataset1, dataset1[4], 7))
 print("    ")
-print(prediction.accuracy(dataset1, dataset1[0], 5))
+print(prediction.accuracy(dataset1, dataset1[4], 7))
 #print(prediction.accuracy)
 #print(prediction.predict(dataset1, dataset1[0], 3))
 #print(prediction.accuracy(dataset1, dataset1[0], 3))

@@ -4,7 +4,30 @@ class KNearestNeighbor:
 		self.test_row = test_row
 		self.num_neighbors = num_neighbors
 		self.row_others = row_others 
-		
+	# Scroll through each value in each row, and find the minimum and maximum
+	# values for each column in the dataset. Append it to minmax list. 	
+	def Min_Max(self, dataset):
+		MinMax = list()
+		for i in range(len(dataset[0])):
+			#the above represents # of columns in dataset
+			col_values = [row[i] for row in dataset]
+			#the above represents individual values for given columns in each row of dataset
+			# basically an index for the column, along with all values
+			Min = min(col_values)
+			# this takes the minimum value in specific column
+			Max = max(col_values)
+			# takes maximum value in specific column
+			MinMax.append([Min, Max])
+			#appends this to a tuple, returns tuple
+		return MinMax
+
+	def Normalize(self, dataset):
+		MinMaxx = self.Min_Max(dataset)
+		for row in dataset:
+			for i in range(len(row)):
+				row[i] = (row[i]-MinMaxx[i][0]) / (MinMaxx[i][1]-MinMaxx[i][0])
+		return dataset		
+	
 	#vector distance takes in a specific row, and finds the distance
 	# between that row and other rows, or in the case of a dataset, 
 	# all other rows in that dataset
@@ -14,10 +37,10 @@ class KNearestNeighbor:
 	# it squares their distances, adds it to the distance value, and takes
 	# the square root of this value, to find the distance
 	# row_others represents rest of dataset
-	def vector_distance(self, dataset, test_row):
+	def vector_distance(self, test_row, row_others):
 		distance = 0.0
-		for i in range(len(test_row)-2):
-			distance += (test_row[i] - dataset[i])**2
+		for i in range(len(test_row)-1):
+			distance += (test_row[i] - row_others[i])**2
 		return distance**2
 	#fit takes in vector distance between specific rows and target row,
 	# adds them to a tuple, sorts the tuple by distances
@@ -60,9 +83,7 @@ class KNearestNeighbor:
 			if output[i] == prediction:
 				correct += 1
 		return correct / float(len(output)) * 100.0    
-	#in order for this to be most accurate, classification comparison column needs to be on far right, so that 
-	# it is not included in the vector distances, and therefore the column does not interfere with the other columns
-	# and their interaction with each other
+	
 
 dataset1 = [[2.7810836,2.550537003,0],
 	[1.465489372,2.362125076,1],
@@ -78,5 +99,8 @@ dataset1 = [[2.7810836,2.550537003,0],
 prediction = KNearestNeighbor(dataset1, dataset1[0], 3, dataset1)
 # This will give the majority classification prediction based on number of nearest neighbors
 
+print(prediction.Min_Max(dataset1))
+print(prediction.Normalize(dataset1))
 print(prediction.predict(dataset1, dataset1[0], 3))
 print(prediction.accuracy(dataset1, dataset1[0], 3))
+

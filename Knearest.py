@@ -20,7 +20,9 @@ class KNearestNeighbor:
 			MinMax.append([Min, Max])
 			#appends this to a tuple, returns tuple
 		return MinMax
-
+	# using MinMaxx, which is the list of min and max values from the min_max function,
+	# we can iterate over each value in each row, 
+	# normalize the data, and return normalized dataset
 	def Normalize(self, dataset):
 		MinMaxx = self.Min_Max(dataset)
 		for row in dataset:
@@ -72,12 +74,15 @@ class KNearestNeighbor:
 		output = [row[-1] for row in neighbors]
 		prediction = max(set(output), key=output.count)
 		return prediction
-	#we take the majority prediction and compare it to actual predictions,
-	# return percentage of correct predictions
+	#we take the nearest neighbors from the fit method,
+	# take the final column in their specific rows, which must always be the classifying column in dataset,
+	# take the predicted classifier, 0, or 1, of the majority nearest neighbors from the predict method,
+	# and just compare each classifier value in each nearest neighbor equal to this prediction/ the length of 
+	# nearest neighbors, then *100 to make into a percent
 	def accuracy(self, dataset, test_row, num_neighbors):
 		neighbors = self.fit(dataset, test_row, num_neighbors)
 		output = [row[-1] for row in neighbors]
-		prediction = max(set(output), key=output.count)
+		prediction = self.predict(dataset, test_row, num_neighbors)
 		correct = 0
 		for i in range(len(output)):
 			if output[i] == prediction:
@@ -101,6 +106,12 @@ prediction = KNearestNeighbor(dataset1, dataset1[0], 3, dataset1)
 
 print(prediction.Min_Max(dataset1))
 print(prediction.Normalize(dataset1))
-print(prediction.predict(dataset1, dataset1[0], 3))
-print(prediction.accuracy(dataset1, dataset1[0], 3))
+print ("   ")
+print( prediction.fit(dataset1, dataset1[0], 5))
+print(prediction.predict(dataset1, dataset1[0], 5))
+print("    ")
+print(prediction.accuracy(dataset1, dataset1[0], 5))
+#print(prediction.accuracy)
+#print(prediction.predict(dataset1, dataset1[0], 3))
+#print(prediction.accuracy(dataset1, dataset1[0], 3))
 

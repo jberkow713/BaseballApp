@@ -5,10 +5,11 @@ class KNearestNeighbor:
 		self.num_neighbors = num_neighbors
 		self.row_others = row_others 
 	# Scroll through each value in each row, and find the minimum and maximum
-	# values for each column in the dataset. Append it to minmax list. 	
+	# values for each column in the dataset. Append it to minmax list. 
+	# not include last column of dataset, as it should be classification 0/1 column, no need for min/max	
 	def Min_Max(self, dataset):
 		MinMax = list()
-		for i in range(len(dataset[0])):
+		for i in range(len(dataset[0])-1):
 			#the above represents # of columns in dataset
 			col_values = [row[i] for row in dataset]
 			#the above represents individual values for given columns in each row of dataset
@@ -23,10 +24,11 @@ class KNearestNeighbor:
 	# using MinMaxx, which is the list of min and max values from the min_max function,
 	# we can iterate over each value in each row, 
 	# normalize the data, and return normalized dataset
+	#not normalizing last column in Dataset, as it should be classification row of 0/1 already
 	def Normalize(self, dataset):
 		MinMaxx = self.Min_Max(dataset)
 		for row in dataset:
-			for i in range(len(row)):
+			for i in range(len(row)-1):
 				row[i] = (row[i]-MinMaxx[i][0]) / (MinMaxx[i][1]-MinMaxx[i][0])
 		return dataset		
 	
@@ -38,7 +40,7 @@ class KNearestNeighbor:
 	# values in the other specified rows
 	# it squares their distances, adds it to the distance value, and takes
 	# the square root of this value, to find the distance
-	# row_others represents rest of dataset
+	#not including last column of dataset, as it should be the classification row
 	def vector_distance(self, test_row, row_others):
 		distance = 0.0
 		for i in range(len(test_row)-1):

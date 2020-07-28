@@ -44,7 +44,8 @@ class KNearestNeighbor:
 		for i in range(len(test_row)-1):
 			distance += (test_row[i] - row_others[i])**2
 		return distance**2
-	#fit takes in vector distance between specific rows and target row,
+	#fit takes in a normalized dataset,
+	# and then taking the vector distance between specific rows and target row in that dataset,
 	# adds them to a tuple, sorts the tuple by distances
 	# creates a new list called neighbors, and for specified number of neighbors,
 	# scrolls through the distances list, and appends the rows with the lowest
@@ -52,7 +53,7 @@ class KNearestNeighbor:
 	# returns the neighbors list
 
 	def fit(self, dataset, test_row, num_neighbors):
-	
+		dataset = self.Normalize(dataset)
 		distances = list()
 		for row in dataset:
 			dist = self.vector_distance(test_row, row)
@@ -104,9 +105,9 @@ dataset1 = [[2.7810836,2.550537003,0],
 prediction = KNearestNeighbor(dataset1, dataset1[0], 3, dataset1)
 # This will give the majority classification prediction based on number of nearest neighbors
 
-print(prediction.Min_Max(dataset1))
-print(prediction.Normalize(dataset1))
-print ("   ")
+#print(prediction.Min_Max(dataset1))
+#print(prediction.Normalize(dataset1))
+#print ("   ")
 print( prediction.fit(dataset1, dataset1[0], 5))
 print(prediction.predict(dataset1, dataset1[0], 5))
 print("    ")

@@ -83,7 +83,7 @@ class KNearestNeighbor:
 	# take the predicted classifier, 0, or 1, of the majority nearest neighbors from the predict method,
 	# and just compare each classifier value in each nearest neighbor equal to this prediction/ the length of 
 	# nearest neighbors, then *100 to make into a percent
-	def accuracy(self, dataset, test_row, num_neighbors, neighbors, prediction):
+	def conclusiveness(self, dataset, test_row, num_neighbors, neighbors, prediction):
 		
 		output = [row[-1] for row in neighbors]
 		correct = 0
@@ -125,19 +125,18 @@ def string_to_float(dataset, column):
 # taking the set values from Distinct, adding them to Dictionary
 # you are then making the value in the specific row, equal to the new enumerated Dictionary value
 
+
+
 def string_to_int(dataset, column):
-	values = [row[column] for row in dataset]
-	Distinct = set(values)
-	Dictionary = dict()
-	for i, value in enumerate(Distinct):
-		Dictionary[value] = i
+	class_values = [row[column] for row in dataset]
+	unique = set(class_values)
+	lookup = dict()
+	for i, value in enumerate(unique):
+		lookup[value] = i
+		print('[%s] => %d' % (value, i))
 	for row in dataset:
-		row[column] = Dictionary[row[column]]
-	return Dictionary
-
-
-
-
+		row[column] = lookup[row[column]]
+	return lookup
 
 dataset = load_dataset('iris.csv')	
 
@@ -152,20 +151,27 @@ prediction = KNearestNeighbor(dataset)
 
 #prediction.Min_Max(dataset)
 x2 = prediction.Normalize(dataset)
+
 #print(x2)
 print ("   ")
-x3 = prediction.fit(x2, x2[3], 5)
-#print(x3)
+# create a new record, and make prediction of classification
+row = [.4,.3,.7,.12]
 
-x4 = prediction.predict(x2, x2[3], 10, x3)
+x3 = prediction.fit(x2, row, 5)
+print(x3)
+
+
+x4 = prediction.predict(x2, row, 10, x3)
 #print(x4)
-x5 = prediction.accuracy(x2, dataset[3], 10, x3, x4)
+x5 = prediction.conclusiveness(x2, row, 10, x3, x4)
 print(x4)
 print(x5)
-#print(prediction.accuracy(dataset, dataset[3], 10))
-#x4 = prediction.predict(dataset, dataset[3], 10)
-#print(x4)
-#print(prediction.accuracy(dataset, dataset[3], 10))
+
+
+
+
+
+
 
 
 

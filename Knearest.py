@@ -1,8 +1,9 @@
 class KNearestNeighbor:
-	def __init__(self, dataset, test_row, num_neighbors):
+	def __init__(self, dataset):
 		self.dataset = dataset 
-		self.test_row = test_row
-		self.num_neighbors = num_neighbors
+		self.__test_row = 0
+		self.__num_neighbors = 0
+		
 		
 	# Scroll through each value in each row, and find the minimum and maximum
 	# values for each column in the dataset. Append it to minmax list. 
@@ -49,10 +50,10 @@ class KNearestNeighbor:
 		return distance**2
 	#fit takes in a normalized dataset,
 	# and then taking the vector distance between specific rows and target row in that dataset,
-	# adds them to a tuple, sorts the tuple by distances
+	# adds them to a tuple, sorts the tuple by distances, smallest at top of list, 
 	# creates a new list called neighbors, and for specified number of neighbors,
-	# scrolls through the distances list, and appends the rows with the lowest
-	# vector_distance to the neighbors list, hence giving the nearest neighbors
+	# scrolls through the distances list, and appends the rows in order 
+	# to the neighbors list, hence giving the nearest neighbors
 	# returns the neighbors list
 
 	def fit(self, dataset, test_row, num_neighbors):
@@ -73,8 +74,7 @@ class KNearestNeighbor:
 	# takes the highest count of the nearest neighbors to the test row,
 	# and returns a prediction value, so if there are 10 1s, and 9 0s, it will
 	# predict a value of 1
-	def predict(self, dataset, test_row, num_neighbors):
-		neighbors = self.fit(dataset, test_row, num_neighbors)
+	def predict(self, dataset, test_row, num_neighbors, neighbors):
 		output = [row[-1] for row in neighbors]
 		prediction = max(set(output), key=output.count)
 		return prediction
@@ -83,39 +83,98 @@ class KNearestNeighbor:
 	# take the predicted classifier, 0, or 1, of the majority nearest neighbors from the predict method,
 	# and just compare each classifier value in each nearest neighbor equal to this prediction/ the length of 
 	# nearest neighbors, then *100 to make into a percent
-	def accuracy(self, dataset, test_row, num_neighbors):
-		neighbors = self.fit(dataset, test_row, num_neighbors)
+	def accuracy(self, dataset, test_row, num_neighbors, neighbors, prediction):
+		
 		output = [row[-1] for row in neighbors]
-		prediction = self.predict(dataset, test_row, num_neighbors)
 		correct = 0
 		for i in range(len(output)):
 			if output[i] == prediction:
 				correct += 1
 		return correct / float(len(output)) * 100.0    
-	
 
-dataset1 = [[2.7810836,2.550537003,0],
-	[1.465489372,2.362125076,1],
-	[3.396561688,4.400293529,0],
-	[1.38807019,1.850220317,1],
-	[3.06407232,3.005305973,0],
-	[7.627531214,2.759262235,1],
-	[5.332441248,2.088626775,1],
-	[6.922596716,1.77106367,1],
-	[8.675418651,-0.242068655,1],
-	[7.673756466,3.508563011,1]]
 
-prediction = KNearestNeighbor(dataset1, dataset1[0], 7)
+#Helper Functions to help read in the data, and change string columns into numerical
+# Classification columns
+
+
+
+from csv import reader
+# reading in a csv file, into necessary dataset
+def load_dataset(filename):
+	dataset = list()
+	with open(filename, 'r') as file:
+		csv_reader = reader(file)
+		for row in csv_reader:
+			if not row:
+				continue
+			dataset.append(row)
+	return dataset
+# this is turning a string into a float
+# so that it can be evaluated in the str_column_to_int method
+
+
+def string_to_float(dataset, column):
+	for row in dataset:
+		row[column] = float(row[column].strip())
+
+
+#youre scrolling through a dataset, row by row, and finding a specific column, 
+# in the case of the iris dataset, it is the last column, specified by (len(dataset[0])-1)
+# youre taking all specific values in that column, throughout the dataset, and you are storing them in an array,
+# Distinct represents the different values in values array
+# taking the set values from Distinct, adding them to Dictionary
+# you are then making the value in the specific row, equal to the new enumerated Dictionary value
+
+def string_to_int(dataset, column):
+	values = [row[column] for row in dataset]
+	Distinct = set(values)
+	Dictionary = dict()
+	for i, value in enumerate(Distinct):
+		Dictionary[value] = i
+	for row in dataset:
+		row[column] = Dictionary[row[column]]
+	return Dictionary
+
+
+
+
+
+dataset = load_dataset('iris.csv')	
+
+for i in range(len(dataset[0])-1):
+	string_to_float(dataset, i)
+# convert class column to integers for specific column
+string_to_int(dataset, len(dataset[0])-1)
+#print(dataset)
+
+prediction = KNearestNeighbor(dataset)
 # This will give the majority classification prediction based on number of nearest neighbors
 
-#print(prediction.Min_Max(dataset1))
-#print(prediction.Normalize(dataset1))
-#print ("   ")
-#print( prediction.fit(dataset1, dataset1[3], 5))
-print(prediction.predict(dataset1, dataset1[4], 7))
-print("    ")
-print(prediction.accuracy(dataset1, dataset1[4], 7))
-#print(prediction.accuracy)
-#print(prediction.predict(dataset1, dataset1[0], 3))
-#print(prediction.accuracy(dataset1, dataset1[0], 3))
+#prediction.Min_Max(dataset)
+x2 = prediction.Normalize(dataset)
+#print(x2)
+print ("   ")
+x3 = prediction.fit(x2, x2[3], 5)
+#print(x3)
 
+x4 = prediction.predict(x2, x2[3], 10, x3)
+#print(x4)
+x5 = prediction.accuracy(x2, dataset[3], 10, x3, x4)
+print(x4)
+print(x5)
+#print(prediction.accuracy(dataset, dataset[3], 10))
+#x4 = prediction.predict(dataset, dataset[3], 10)
+#print(x4)
+#print(prediction.accuracy(dataset, dataset[3], 10))
+
+
+
+#dataset1 = [[2.7810836,2.550537003,0],
+#	[1.465489372,2.362125076,1],
+#	[1.38807019,1.850220317,1],
+#	[3.06407232,3.005305973,0],
+#	[7.627531214,2.759262235,1],
+#	[5.332441248,2.088626775,1],
+#	[6.922596716,1.77106367,1],
+#	[8.675418651,-0.242068655,1],
+#	[7.673756466,3.508563011,1]]

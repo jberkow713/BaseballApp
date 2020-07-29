@@ -1,59 +1,34 @@
-
 import pandas as pd
-import numpy as np
-import math
-import operator
+from sklearn.model_selection import train_test_split
+from sklearn.neighbors import KNeighborsClassifier
+from csv import reader
+
+iris = pd.read_csv("iris.csv")
+print(iris.head())
 
 
-def euclidianDistance(data1, data2, length):
-    distance = 0
-    for x in range(length):
-        distance += np.square(data1[x] - data2[x])
-       
-    return np.sqrt(distance)
-def knn(trainingSet, testInstance, k):
- 
-    distances = {}
-    sort = {}
-length = testInstance.shape[1]
-    print(length)
-    
-    
-    # Calculating euclidean distance between each row of training data and test data
-    for x in range(len(trainingSet)):
-        
-       
-        dist = euclidianDistance(testInstance, trainingSet.iloc[x], length)
-distances[x] = dist[0]
-       
- 
-    
-    # Sorting them on the basis of distance
-    sorted_d = sorted(distances.items(), key=operator.itemgetter(1)) #by using it we store indices also
-    sorted_d1 = sorted(distances.items())
-    print(sorted_d[:5])
-    print(sorted_d1[:5])
-   
- 
-    neighbors = []
-    
-    
-    # Extracting top k neighbors
-    for x in range(k):
-        neighbors.append(sorted_d[x][0])
-counts = {"Iris-setosa":0,"Iris-versicolor":0,"Iris-virginica":0}
-    
-    
-    # Calculating the most freq class in the neighbors
-    for x in range(len(neighbors)):
-        response = trainingSet.iloc[neighbors[x]][-1]
- 
-        if response in counts:
-            counts[response] += 1
-        else:
-            counts[response] = 1
-  
-    print(counts)
-    sortedVotes = sorted(counts.items(), key=operator.itemgetter(1), reverse=True)
-    print(sortedVotes)
-    return(sortedVotes[0][0], neighbors)
+#Drop id column
+
+X = iris.iloc[:, :-1].values
+y = iris.iloc[:, 4].values
+#Split arrays or matrices into random train and test subsets
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.30)
+'''
+print("\n70% train data:")
+print(X_train)
+print(y_train)
+print("\n30% test data:")
+print(X_test)
+print(y_test)
+'''
+#Create KNN Classifier
+#Number of neighbors to use by default for kneighbors queries.
+knn = KNeighborsClassifier(n_neighbors=5)
+#Train the model using the training sets
+knn.fit(X_train, y_train)
+#Predict the response for test dataset
+#print("Response for test dataset:")
+y_pred = knn.predict(X_test)
+print(y_pred)
+
+#test sample : row = [1,.3,1.5,1.5]

@@ -57,7 +57,7 @@ class KNearestNeighbor:
 	# returns the neighbors list
 
 	def fit(self, dataset, test_row, num_neighbors):
-		dataset = self.Normalize(dataset)
+		#dataset = self.Normalize(dataset)
 		distances = list()
 		for row in dataset:
 			dist = self.vector_distance(test_row, row)
@@ -83,6 +83,7 @@ class KNearestNeighbor:
 	# take the predicted classifier, 0, or 1, of the majority nearest neighbors from the predict method,
 	# and just compare each classifier value in each nearest neighbor equal to this prediction/ the length of 
 	# nearest neighbors, then *100 to make into a percent
+	# Of all the neighbors, what percent are the classification of the prediction
 	def conclusiveness(self, dataset, test_row, num_neighbors, neighbors, prediction):
 		
 		output = [row[-1] for row in neighbors]
@@ -124,6 +125,7 @@ def string_to_float(dataset, column):
 # Distinct represents the different values in values array
 # taking the set values from Distinct, adding them to Dictionary
 # you are then making the value in the specific row, equal to the new enumerated Dictionary value
+# Hence manually encoding the classification variable
 
 
 
@@ -150,20 +152,21 @@ prediction = KNearestNeighbor(dataset)
 # This will give the majority classification prediction based on number of nearest neighbors
 
 #prediction.Min_Max(dataset)
-x2 = prediction.Normalize(dataset)
+#x2 = prediction.Normalize(dataset)
 
 #print(x2)
 print ("   ")
-# create a new record, and make prediction of classification
-row = [.4,.3,.7,.12]
-
-x3 = prediction.fit(x2, row, 5)
+# create a new record
+row = [1,.3,1.5,1.5]
+#find nearest neighbors to new data point
+x3 = prediction.fit(dataset, row, 9)
 print(x3)
 
-
-x4 = prediction.predict(x2, row, 10, x3)
+#use nearest neighbors to predict new data points classification
+x4 = prediction.predict(dataset, row, 9, x3)
 #print(x4)
-x5 = prediction.conclusiveness(x2, row, 10, x3, x4)
+#use conclusiveness to predict potential accuracy of new classification
+x5 = prediction.conclusiveness(dataset, row, 9, x3, x4)
 print(x4)
 print(x5)
 

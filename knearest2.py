@@ -29,6 +29,13 @@ knn.fit(X_train, y_train)
 #Predict the response for test dataset
 #print("Response for test dataset:")
 y_pred = knn.predict(X_test)
+print(knn.predict[1,.3,1.5,1.5])
+
+#x_train= X_train.reshape(-1, 1)
+#y_train= y_train.reshape(-1, 1)
+#x_test = X_test.reshape(-1, 1)
+#row = [1,.3,1.5,1.5]
+#y_pred2 = knn.predict(row)
 print(y_pred)
 
 #test sample : row = [1,.3,1.5,1.5]

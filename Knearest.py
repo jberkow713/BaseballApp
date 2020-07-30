@@ -47,7 +47,7 @@ class KNearestNeighbor:
 		distance = 0.0
 		for i in range(len(test_row)-1):
 			distance += (test_row[i] - dataset[i])**2
-		return distance**2
+		return distance**(.5)
 	#fit takes in a normalized dataset,
 	# and then taking the vector distance between specific rows and target row in that dataset,
 	# adds them to a tuple, sorts the tuple by distances, smallest at top of list, 
@@ -159,6 +159,7 @@ print ("   ")
 # create a new record
 row = [1,.3,1.5,1.5]
 #find nearest neighbors to new data point
+#prediction setosa
 x3 = prediction.fit(dataset, row, 9)
 print(x3)
 
@@ -169,6 +170,26 @@ x4 = prediction.predict(dataset, row, 9, x3)
 x5 = prediction.conclusiveness(dataset, row, 9, x3, x4)
 print(x4)
 print(x5)
+
+row2 = [3, 6, 6, 3]
+#find nearest neighbors to new data point
+# prediction virginica
+x6 = prediction.fit(dataset, row2, 9)
+x7 = prediction.predict(dataset, row, 9, x6)
+
+x8 = prediction.conclusiveness(dataset, row, 9, x6, x7)
+print(x6)
+print(x7)
+print(x8)
+
+row3 = [[1, 8, 4, 2.3]]
+x9 = prediction.fit(dataset, row3, 9)
+x10 = prediction.predict(dataset, row, 9, x9)
+
+x11 = prediction.conclusiveness(dataset, row, 9, x9, x10)
+print(x9)
+print(x10)
+print(x11)
 
 
 

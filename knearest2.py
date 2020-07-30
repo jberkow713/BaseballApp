@@ -1,41 +1,51 @@
-import pandas as pd
-from sklearn.model_selection import train_test_split
-from sklearn.neighbors import KNeighborsClassifier
-from csv import reader
-
-iris = pd.read_csv("iris.csv")
-print(iris.head())
-
-
-#Drop id column
-
-X = iris.iloc[:, :-1].values
-y = iris.iloc[:, 4].values
-#Split arrays or matrices into random train and test subsets
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.30)
-'''
-print("\n70% train data:")
-print(X_train)
-print(y_train)
-print("\n30% test data:")
-print(X_test)
-print(y_test)
-'''
-#Create KNN Classifier
-#Number of neighbors to use by default for kneighbors queries.
-knn = KNeighborsClassifier(n_neighbors=5)
-#Train the model using the training sets
-knn.fit(X_train, y_train)
-#Predict the response for test dataset
-#print("Response for test dataset:")
-y_pred = knn.predict(X_test)
-print(knn.predict[1,.3,1.5,1.5])
-
-#x_train= X_train.reshape(-1, 1)
-#y_train= y_train.reshape(-1, 1)
-#x_test = X_test.reshape(-1, 1)
-#row = [1,.3,1.5,1.5]
-#y_pred2 = knn.predict(row)
-print(y_pred)
-
-#test sample : row = [1,.3,1.5,1.5]
+class KNearestNeighbor:
+	def __init__(self, dataset):
+		self.dataset = dataset 
+		self.__test_row = 0
+		self.__num_neighbors = 0
+			
+	def Min_Max(self, dataset):
+		MinMax = list()
+		for i in range(len(dataset[0])-1):
+			col_values = [row[i] for row in dataset]
+			Min = min(col_values)
+			Max = max(col_values)
+			MinMax.append([Min, Max])
+		return MinMax
+	
+	def Normalize(self, dataset):
+		MinMaxx = self.Min_Max(dataset)
+		for row in dataset:
+			for i in range(len(row)-1):
+				row[i] = (row[i]-MinMaxx[i][0]) / (MinMaxx[i][1]-MinMaxx[i][0])
+		return dataset		
+		
+	def vector_distance(self, test_row, dataset):
+		distance = 0.0
+		for i in range(len(test_row)-1):
+			distance += (test_row[i] - dataset[i])**2
+		return distance**(.5)
+	
+	def fit(self, dataset, test_row, num_neighbors):
+		distances = list()
+		for row in dataset:
+			dist = self.vector_distance(test_row, row)
+			distances.append((row, dist))
+		distances.sort(key=lambda tup: tup[1])
+		neighbors = list()
+		for i in range(num_neighbors):
+			neighbors.append(distances[i][0])
+		return neighbors
+    	
+	def predict(self, dataset, test_row, num_neighbors, neighbors):
+		output = [row[-1] for row in neighbors]
+		prediction = max(set(output), key=output.count)
+		return prediction
+	
+	def conclusiveness(self, dataset, test_row, num_neighbors, neighbors, prediction):
+		output = [row[-1] for row in neighbors]
+		correct = 0
+		for i in range(len(output)):
+			if output[i] == prediction:
+				correct += 1
+		return correct / float(len(output)) * 100.0  

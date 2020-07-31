@@ -149,13 +149,7 @@ string_to_int(dataset, len(dataset[0])-1)
 #print(dataset)
 
 prediction = KNearestNeighbor(dataset)
-# This will give the majority classification prediction based on number of nearest neighbors
 
-#prediction.Min_Max(dataset)
-#x2 = prediction.Normalize(dataset)
-
-#print(x2)
-print ("   ")
 # create a new record
 row = [1,.3,1.5,1.5]
 #find nearest neighbors to new data point
@@ -171,22 +165,22 @@ x5 = prediction.conclusiveness(dataset, row, 9, x3, x4)
 print(x4)
 print(x5)
 
-row2 = [3, 6, 6, 3]
+row2 = [3, 6, 5, 2]
 #find nearest neighbors to new data point
 # prediction virginica
 x6 = prediction.fit(dataset, row2, 9)
-x7 = prediction.predict(dataset, row, 9, x6)
+x7 = prediction.predict(dataset, row2, 9, x6)
 
-x8 = prediction.conclusiveness(dataset, row, 9, x6, x7)
+x8 = prediction.conclusiveness(dataset, row2, 9, x6, x7)
 print(x6)
 print(x7)
 print(x8)
 
 row3 = [[1, 8, 4, 2.3]]
 x9 = prediction.fit(dataset, row3, 9)
-x10 = prediction.predict(dataset, row, 9, x9)
+x10 = prediction.predict(dataset, row3, 9, x9)
 
-x11 = prediction.conclusiveness(dataset, row, 9, x9, x10)
+x11 = prediction.conclusiveness(dataset, row3, 9, x9, x10)
 print(x9)
 print(x10)
 print(x11)
@@ -199,12 +193,5 @@ print(x11)
 
 
 
-#dataset1 = [[2.7810836,2.550537003,0],
-#	[1.465489372,2.362125076,1],
-#	[1.38807019,1.850220317,1],
-#	[3.06407232,3.005305973,0],
-#	[7.627531214,2.759262235,1],
-#	[5.332441248,2.088626775,1],
-#	[6.922596716,1.77106367,1],
-#	[8.675418651,-0.242068655,1],
-#	[7.673756466,3.508563011,1]]
+
+

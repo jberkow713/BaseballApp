@@ -20,7 +20,7 @@ print("predicted:",neigh.predict(test1))
 print("neighbors",neigh.kneighbors(test1))
 
 
-test2 = [[3, 6, 6, 3]]
+test2 = [[3, 6, 5, 2]]
 # Virginica
 test2 = pd.DataFrame(test2)
 print(test2)

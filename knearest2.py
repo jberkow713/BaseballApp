@@ -49,3 +49,21 @@ class KNearestNeighbor:
 			if output[i] == prediction:
 				correct += 1
 		return correct / float(len(output)) * 100.0  
+
+dataset = load_dataset('iris.csv')	
+for i in range(len(dataset[0])-1):
+	string_to_float(dataset, i)
+string_to_int(dataset, len(dataset[0])-1)
+
+prediction = KNearestNeighbor(dataset)
+
+row = [1,.3,1.5,1.5]
+
+x3 = prediction.fit(dataset, row, 9)
+print(x3)
+
+x4 = prediction.predict(dataset, row, 9, x3)
+
+x5 = prediction.conclusiveness(dataset, row, 9, x3, x4)
+print(x4)
+print(x5)        

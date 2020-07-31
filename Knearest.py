@@ -167,7 +167,7 @@ print(x5)
 
 row2 = [3, 6, 5, 2]
 #find nearest neighbors to new data point
-# prediction virginica
+# prediction virsicolor
 x6 = prediction.fit(dataset, row2, 9)
 x7 = prediction.predict(dataset, row2, 9, x6)
 
@@ -177,6 +177,8 @@ print(x7)
 print(x8)
 
 row3 = [[1, 8, 4, 2.3]]
+#find nearest neighbors to new data point
+# prediction setosa
 x9 = prediction.fit(dataset, row3, 9)
 x10 = prediction.predict(dataset, row3, 9, x9)
 

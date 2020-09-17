@@ -1,2 +1,2 @@
 # BaseballApp
-Web App to evaluate MLB players
+Built Knearest-Neighbor model class from scratch, tested against Scikit Learn model
